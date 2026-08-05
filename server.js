@@ -7,11 +7,16 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-db.run(`
+
+// ======================
+// 建立資料表
+// ======================
+
+db.query(`
 
 CREATE TABLE IF NOT EXISTS posts(
 
-id INTEGER PRIMARY KEY,
+id BIGINT PRIMARY KEY,
 
 author TEXT,
 
@@ -25,7 +30,18 @@ likedBy TEXT
 
 )
 
-`);
+`)
+.then(()=>{
+
+    console.log("Posts table ready");
+
+})
+.catch(err=>{
+
+    console.log(err);
+
+});
+
 
 
 // ======================
@@ -33,122 +49,55 @@ likedBy TEXT
 // ======================
 
 let invites = [
+
     {
-        code: "ISECR001",
-        used: false
+        code:"ISECR001",
+        used:false
     },
 
     {
-        code: "ISECR002",
-        used: false
+        code:"ISECR002",
+        used:false
     },
 
     {
-        code: "ISECR003",
-        used: false
+        code:"ISECR003",
+        used:false
     }
+
 ];
 
 
 let members = [
 
     {
-        username: "LKSK",
-        password: "ARLY",
-        level: "A6",
-        bio: "ISECR 核心成員"
+        username:"LKSK",
+        password:"ARLY",
+        level:"A6",
+        bio:"ISECR 核心成員"
     },
 
     {
-        username: "R.exe",
-        password: "RWW",
-        level: "B2",
-        bio: "ISECR 技術部"
+        username:"R.exe",
+        password:"RWW",
+        level:"B2",
+        bio:"ISECR 技術部"
     }
 
 ];
-
-
-let posts = [];
-
-let comments = [];
-
-// ======================
-// 回覆文章
-// ======================
-
-app.post("/api/posts/:id/comments",(req,res)=>{
-
-    const {
-        author,
-        content
-    } = req.body;
-
-
-    const comment = {
-
-        id: Date.now(),
-
-        postId: req.params.id,
-
-        author,
-
-        content,
-
-        time:new Date().toLocaleString()
-
-    };
-
-
-    comments.push(comment);
-
-
-    res.json({
-
-        success:true,
-
-        comment
-
-    });
-
-
-});
-
-
-
-// ======================
-// 取得文章回覆
-// ======================
-
-app.get("/api/posts/:id/comments",(req,res)=>{
-
-
-    const result =
-    comments.filter(
-        c =>
-        c.postId == req.params.id
-    );
-
-
-    res.json(result);
-
-
-});
-
 
 
 // ======================
 // 測試
 // ======================
 
-app.get("/", (req,res)=>{
+app.get("/",(req,res)=>{
 
     res.send(
         "ISECR Server Online"
     );
 
 });
-
 
 
 
@@ -165,14 +114,12 @@ app.post("/api/login",(req,res)=>{
     } = req.body;
 
 
-
     const user =
     members.find(
         m =>
         m.username === username &&
         m.password === password
     );
-
 
 
     if(user){
@@ -186,7 +133,6 @@ app.post("/api/login",(req,res)=>{
         });
 
     }
-
     else{
 
         res.json({
@@ -198,7 +144,6 @@ app.post("/api/login",(req,res)=>{
         });
 
     }
-
 
 });
 
@@ -247,7 +192,6 @@ app.post("/api/register",(req,res)=>{
     );
 
 
-
     if(!code){
 
         return res.json({
@@ -259,7 +203,6 @@ app.post("/api/register",(req,res)=>{
         });
 
     }
-
 
 
     if(code.used){
@@ -275,13 +218,11 @@ app.post("/api/register",(req,res)=>{
     }
 
 
-
     const exists =
     members.some(
         m =>
         m.username === username
     );
-
 
 
     if(exists){
@@ -300,26 +241,18 @@ app.post("/api/register",(req,res)=>{
 
     const newUser = {
 
+        username,
 
-        username:username,
-
-
-        password:password,
-
+        password,
 
         level:"C1",
 
-
         bio:"ISECR 新成員"
-
 
     };
 
 
-
     members.push(newUser);
-
-
 
     code.used=true;
 
@@ -332,7 +265,6 @@ app.post("/api/register",(req,res)=>{
         user:newUser
 
     });
-
 
 
 });
@@ -348,12 +280,13 @@ app.get("/api/members",(req,res)=>{
 
 
     res.json(
+
         members
+
     );
 
 
 });
-
 
 
 
@@ -363,30 +296,45 @@ app.get("/api/members",(req,res)=>{
 
 app.get("/api/posts",(req,res)=>{
 
-    db.all(
-        "SELECT * FROM posts",
-        [],
-        (err,rows)=>{
+
+    db.query(
+        "SELECT * FROM posts ORDER BY id DESC",
+        (err,result)=>{
+
 
             if(err){
+
+                console.log(err);
 
                 return res.json([]);
 
             }
 
 
-            rows.forEach(p=>{
+
+            const posts =
+            result.rows;
+
+
+
+            posts.forEach(p=>{
 
                 p.likedBy =
-                JSON.parse(p.likedBy || "[]");
+                JSON.parse(
+                    p.likedBy || "[]"
+                );
 
             });
 
 
-            res.json(rows);
+
+            res.json(posts);
+
 
         }
+
     );
+
 
 });
 
@@ -428,10 +376,10 @@ app.post("/api/posts",(req,res)=>{
         id:Date.now(),
 
 
-        author:author,
+        author,
 
 
-        content:content,
+        content,
 
 
         time:new Date().toLocaleString(),
@@ -447,38 +395,56 @@ app.post("/api/posts",(req,res)=>{
 
 
 
-    db.run(
+    db.query(
+
 `
 INSERT INTO posts
+
 (id,author,content,time,likes,likedBy)
-VALUES(?,?,?,?,?,?)
+
+VALUES($1,$2,$3,$4,$5,$6)
+
 `,
+
 [
+
 post.id,
+
 post.author,
+
 post.content,
+
 post.time,
+
 post.likes,
+
 JSON.stringify(post.likedBy)
+
 ],
-function(err){
+
+
+(err)=>{
+
 
     if(err){
 
         console.log(err);
 
+
+        return res.json({
+
+            success:false
+
+        });
+
     }
-    else{
 
-        console.log(
-        "文章已保存:",
-        this.lastID
-        );
 
-    }
 
-}
-);
+    console.log(
+        "文章已保存",
+        post.id
+    );
 
 
 
@@ -486,9 +452,16 @@ function(err){
 
         success:true,
 
-        post:post
+        post
 
     });
+
+
+
+}
+
+
+);
 
 
 });
@@ -508,27 +481,43 @@ app.post("/api/posts/:id/like",(req,res)=>{
     const user = req.body.user;
 
 
-    db.get(
-        "SELECT * FROM posts WHERE id=?",
+
+    db.query(
+
+        "SELECT * FROM posts WHERE id=$1",
+
         [id],
-        (err,post)=>{
+
+        (err,result)=>{
 
 
-            if(!post){
+            if(err || result.rows.length===0){
 
                 return res.json({
+
                     success:false
+
                 });
 
             }
 
 
+
+            const post =
+            result.rows[0];
+
+
+
             let likedBy =
-            JSON.parse(post.likedBy || "[]");
+            JSON.parse(
+                post.likedBy || "[]"
+            );
+
 
 
             let likes =
             post.likes;
+
 
 
             if(likedBy.includes(user)){
@@ -551,30 +540,45 @@ app.post("/api/posts/:id/like",(req,res)=>{
 
                 likes++;
 
+
             }
 
 
 
-            db.run(
+            db.query(
+
             `
             UPDATE posts
 
-            SET likes=?,
-            likedBy=?
+            SET likes=$1,
+            likedBy=$2
 
-            WHERE id=?
+            WHERE id=$3
 
             `,
+
             [
-                likes,
-                JSON.stringify(likedBy),
-                id
-            ]);
 
+            likes,
 
-            res.json({
-                success:true
-            });
+            JSON.stringify(likedBy),
+
+            id
+
+            ],
+
+            ()=>{
+
+                res.json({
+
+                    success:true
+
+                });
+
+            }
+
+            );
+
 
 
         }
@@ -594,22 +598,43 @@ app.post("/api/posts/:id/like",(req,res)=>{
 app.delete("/api/posts/:id",(req,res)=>{
 
 
-    posts =
-    posts.filter(
+    const id =
+    req.params.id;
 
-        p =>
-        p.id != req.params.id
+
+
+    db.query(
+
+        "DELETE FROM posts WHERE id=$1",
+
+        [id],
+
+        (err)=>{
+
+
+            if(err){
+
+                return res.json({
+
+                    success:false
+
+                });
+
+            }
+
+
+
+            res.json({
+
+                success:true
+
+            });
+
+
+
+        }
 
     );
-
-
-
-    res.json({
-
-        success:true
-
-    });
-
 
 
 });
@@ -623,6 +648,7 @@ app.delete("/api/posts/:id",(req,res)=>{
 
 const PORT =
 process.env.PORT || 3000;
+
 
 
 app.listen(PORT,()=>{
