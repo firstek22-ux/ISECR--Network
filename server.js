@@ -499,7 +499,7 @@ app.post("/api/posts/:id/like",(req,res)=>{
 
 
             let likedBy =
-            JSON.parse(post.likedBy || "[]");
+            JSON.parse(post.likedby || "[]");
 
 
             let likes =
@@ -535,7 +535,7 @@ app.post("/api/posts/:id/like",(req,res)=>{
             `
             UPDATE posts
             SET likes=$1,
-            likedBy=$2
+            likedby=$2
             WHERE id=$3
             `,
             [
