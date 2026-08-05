@@ -475,48 +475,35 @@ JSON.stringify(post.likedBy)
 
 app.post("/api/posts/:id/like",(req,res)=>{
 
-
     const id = req.params.id;
-
     const user = req.body.user;
 
 
-
     db.query(
-
         "SELECT * FROM posts WHERE id=$1",
-
         [id],
-
         (err,result)=>{
 
 
             if(err || result.rows.length===0){
 
                 return res.json({
-
                     success:false
-
                 });
 
             }
-
 
 
             const post =
             result.rows[0];
 
 
-
             let likedBy =
-            JSON.parse(
-                post.likedBy || "[]"
-            );
-
+            JSON.parse(post.likedBy || "[]");
 
 
             let likes =
-            post.likes;
+            post.likes || 0;
 
 
 
@@ -540,51 +527,34 @@ app.post("/api/posts/:id/like",(req,res)=>{
 
                 likes++;
 
-
             }
 
 
 
             db.query(
-
             `
             UPDATE posts
-
             SET likes=$1,
             likedBy=$2
-
             WHERE id=$3
-
             `,
-
             [
-
-            likes,
-
-            JSON.stringify(likedBy),
-
-            id
-
+                likes,
+                JSON.stringify(likedBy),
+                id
             ],
-
             ()=>{
 
                 res.json({
-
-                    success:true
-
+                    success:true,
+                    likes,
+                    likedBy
                 });
 
-            }
-
-            );
-
-
+            });
 
         }
-
     );
-
 
 });
 
