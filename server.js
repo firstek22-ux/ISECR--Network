@@ -448,13 +448,11 @@ app.post("/api/posts",(req,res)=>{
 
 
     db.run(
-
 `
 INSERT INTO posts
 (id,author,content,time,likes,likedBy)
 VALUES(?,?,?,?,?,?)
 `,
-
 [
 post.id,
 post.author,
@@ -462,8 +460,24 @@ post.content,
 post.time,
 post.likes,
 JSON.stringify(post.likedBy)
-]
+],
+function(err){
 
+    if(err){
+
+        console.log(err);
+
+    }
+    else{
+
+        console.log(
+        "文章已保存:",
+        this.lastID
+        );
+
+    }
+
+}
 );
 
 
