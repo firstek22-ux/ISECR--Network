@@ -154,6 +154,14 @@ button:hover{
 
 }
 
+    #confirmBox{
+    position:fixed;
+    top:40%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    z-index:999;
+    }
+
 
 
 /* 動態 */
@@ -542,6 +550,12 @@ Español
 
 
 <div class="bottom-nav hidden" id="navbar">
+
+    <div id="confirmBox" class="hidden">
+<p>確定刪除?</p>
+<button onclick="confirmDelete(true)">Y</button>
+<button onclick="confirmDelete(false)">N</button>
+    </div>
 
 
 <button class="nav-btn"
@@ -1558,26 +1572,40 @@ async function likePost(id){
 // 刪除文章
 
 
-async function deletePost(id){
+let deleteId = null;
 
 
-    let answer = prompt("Y/N");
+function deletePost(id){
 
-if(
-    answer !== "Y" &&
-    answer !== "y"
-)
-return;
+    deleteId = id;
+
+    document
+    .getElementById("confirmBox")
+    .classList
+    .remove("hidden");
+
+}
+
+
+
+async function confirmDelete(result){
+
+    document
+    .getElementById("confirmBox")
+    .classList
+    .add("hidden");
+
+
+    if(!result)
+    return;
 
 
     await fetch(
 
-        API+"/posts/"+id,
+        API+"/posts/"+deleteId,
 
         {
-
-        method:"DELETE"
-
+            method:"DELETE"
         }
 
     );
