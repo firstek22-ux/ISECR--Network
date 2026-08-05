@@ -26,7 +26,7 @@ time TEXT,
 
 likes INTEGER,
 
-likedBy TEXT
+likedby TEXT
 
 )
 
