@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>ISECR Network v0.5</title>
+
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+
+body{
+
+    background:#111;
+    color:#00ff88;
+
+    font-family:
+    -apple-system,
+    "Segoe UI",
+    "PingFang TC",
+    "Microsoft JhengHei",
+    sans-serif;
+
+    text-align:center;
+
+    margin:0;
+
+    padding-bottom:90px;
+
+}
+
+
+
+h1{
+
+    font-size:22px;
+
+    letter-spacing:2px;
+
+    padding-top:20px;
+
+    text-shadow:
+    0 0 8px #00ff8877;
+
+}
+
+
+
+.box{
+
+    width:92%;
+
+    max-width:500px;
+
+    margin:20px auto;
+
+    padding:20px;
+
+    border:
+
+    1px solid #00ff88;
+
+
+    border-radius:12px;
+
+
+    background:#0d0d0d;
+
+}
+
+
+
+input,
+textarea{
+
+
+    width:90%;
+
+    padding:12px;
+
+    margin:8px;
+
+
+    background:#1a1a1a;
+
+
+    color:#00ff88;
+
+
+    border:
+
+    1px solid #00ff88;
+
+
+    border-radius:8px;
+
+    font-size:14px;
+
+}
+
+
+
+textarea{
+
+    resize:vertical;
+
+}
+
+
+
+button{
+
+
+    padding:10px 18px;
+
+    margin:6px;
+
+
+    background:#111;
+
+
+    color:#00ff88;
+
+
+    border:
+
+    1px solid #00ff88;
+
+
+    border-radius:8px;
+
+
+}
+
+
+
+button:hover{
+
+    background:#003322;
+
+}
+
+
+
+.hidden{
+
+    display:none;
+
+}
+
+
+
+/* 動態 */
+
+.post{
+
+
+    border:
+
+    1px solid #00ff88;
+
+
+    border-radius:12px;
+
+
+    padding:15px;
+
+
+    margin:12px 0;
+
+
+    text-align:left;
+
+
+}
+
+
+
+.avatar{
+
+
+    width:40px;
+
+    height:40px;
+
+
+    border-radius:50%;
+
+
+    border:
+
+    1px solid #00ff88;
+
+
+    display:inline-flex;
+
+
+    align-items:center;
+
+
+    justify-content:center;
+
+
+}
+
+
+
+.username{
+
+    font-weight:bold;
+
+}
+
+
+
+.meta{
+
+    opacity:.6;
+
+    font-size:12px;
+
+    margin-top:6px;
+
+}
+
+
+
+.action{
+
+    margin-top:10px;
+
+}
+
+
+
+.liked{
+
+    background:#003322;
+
+}
+
+
+
+.empty{
+
+    opacity:.5;
+
+    padding:20px;
+
+}
+
+
+
+/* 導航 */
+
+
+.bottom-nav{
+
+
+    position:fixed;
+
+
+    bottom:0;
+
+
+    left:0;
+
+
+    width:100%;
+
+
+    height:65px;
+
+
+    background:#111;
+
+
+    border-top:
+
+    1px solid #00ff88;
+
+
+    display:flex;
+
+
+}
+
+
+
+.nav-btn{
+
+
+    flex:1;
+
+
+    background:none;
+
+
+    border:none;
+
+
+    color:#00ff88;
+
+
+    opacity:.6;
+
+
+}
+
+
+
+.nav-btn.active{
+
+    opacity:1;
+
+}
+
+
+
+</style>
+
+</head>
+
+
+
+<body>
+
+
+<h1>
+ISECR INTERNAL NETWORK
+</h1>
+
+
+
+<!-- 登入入口 -->
+
+<div class="box" id="menu">
+
+<h2>
+身份驗證
+</h2>
+
+
+<button onclick="showLogin()">
+已有帳號
+</button>
+
+
+<button onclick="showRegister()">
+新成員
+</button>
+
+
+</div>
+
+
+
+<!-- 登入 -->
+
+<div class="box hidden" id="login">
+
+
+<h2>
+成員登入
+</h2>
+
+
+<input id="loginName"
+placeholder="用戶名">
+
+
+<input id="loginPass"
+type="password"
+placeholder="密碼">
+
+
+<br>
+
+
+<button onclick="login()">
+登入
+</button>
+
+
+<button onclick="backMenu()">
+返回
+</button>
+
+
+</div>
+
+
+
+<!-- 註冊 -->
+
+
+<div class="box hidden" id="register">
+
+
+<h2>
+新成員激活
+</h2>
+
+
+<input id="invite"
+placeholder="邀請碼">
+
+
+<br>
+
+
+<button onclick="register()">
+激活
+</button>
+
+
+<button onclick="backMenu()">
+返回
+</button>
+
+
+</div>
+
+
+
+<!-- 主頁 -->
+
+
+<div class="box hidden" id="home">
+
+
+<h2>
+🏠 ISECR 動態牆
+</h2>
+
+
+<div id="profileMini"></div>
+
+
+<hr>
+
+
+<textarea
+id="postInput"
+rows="4"
+placeholder="發布新的訊息...">
+</textarea>
+
+
+<br>
+
+
+<button onclick="createPost()">
+發布
+</button>
+
+
+
+<hr>
+
+
+<div id="feed"></div>
+
+
+</div>
+
+
+
+<!-- 個人 -->
+
+<div class="box hidden" id="profile">
+
+<div id="profileCard"></div>
+
+
+</div>
+
+
+
+<!-- 成員 -->
+
+<div class="box hidden" id="members">
+
+
+<h2>
+👥 成員
+</h2>
+
+
+<div id="memberList"></div>
+
+
+</div>
+
+
+
+<!-- 設定 -->
+
+
+<div class="box hidden" id="settings">
+
+
+<h2>
+⚙ 設定
+</h2>
+
+
+<button onclick="logout()">
+登出
+</button>
+
+
+</div>
+
+
+
+<div class="bottom-nav hidden" id="navbar">
+
+
+<button class="nav-btn"
+onclick="showPage('home')">
+
+🏠
+
+</button>
+
+
+<button class="nav-btn"
+onclick="showPage('members')">
+
+👥
+
+</button>
+
+
+<button class="nav-btn"
+onclick="showPage('profile')">
+
+👤
+
+</button>
+
+
+<button class="nav-btn"
+onclick="showPage('settings')">
+
+⚙
+
+</button>
+
+
+</div>
+
+<script>
+
+const API = "/api";
+
+
+let currentUser = null;
+
+
+
+// ======================
+// 初始化
+// ======================
+
+
+window.onload = async ()=>{
+
+
+    const saved =
+    localStorage.getItem("currentUser");
+
+
+    if(saved){
+
+        currentUser =
+        JSON.parse(saved);
+
+        enterApp();
+
+    }
+
+
+};
+
+
+
+// ======================
+// 頁面控制
+// ======================
+
+
+const pages=[
+
+"menu",
+"login",
+"register",
+"home",
+"profile",
+"members",
+"settings"
+
+];
+
+
+
+function hideAll(){
+
+    pages.forEach(id=>{
+
+        const e=
+        document.getElementById(id);
+
+        if(e)
+        e.classList.add("hidden");
+
+    });
+
+}
+
+
+
+function showPage(page){
+
+
+    hideAll();
+
+
+    document
+    .getElementById(page)
+    .classList.remove("hidden");
+
+
+
+    if(page==="home")
+    loadPosts();
+
+
+
+    if(page==="members")
+    loadMembers();
+
+
+
+    if(page==="profile")
+    showProfile();
+
+
+}
+
+
+
+function backMenu(){
+
+    hideAll();
+
+    document
+    .getElementById("menu")
+    .classList.remove("hidden");
+
+}
+
+
+
+
+// ======================
+// 登入
+// ======================
+
+
+function showLogin(){
+
+    hideAll();
+
+    document
+    .getElementById("login")
+    .classList
+    .remove("hidden");
+
+}
+
+
+
+function showRegister(){
+
+    hideAll();
+
+    document
+    .getElementById("register")
+    .classList
+    .remove("hidden");
+
+}
+
+
+
+
+
+async function login(){
+
+
+    let username =
+    document
+    .getElementById("loginName")
+    .value.trim();
+
+
+    let password =
+    document
+    .getElementById("loginPass")
+    .value;
+
+
+
+    let res =
+    await fetch(
+        API+"/login",
+        {
+
+            method:"POST",
+
+            headers:{
+
+                "Content-Type":
+                "application/json"
+
+            },
+
+
+            body:JSON.stringify({
+
+                username,
+                password
+
+            })
+
+        }
+    );
+
+
+
+    let data =
+    await res.json();
+
+
+
+    if(data.success){
+
+
+        currentUser =
+        data.user;
+
+
+        localStorage
+        .setItem(
+            "currentUser",
+            JSON.stringify(currentUser)
+        );
+
+
+        enterApp();
+
+
+    }
+
+    else{
+
+
+        alert(
+        "身份驗證拒絕"
+        );
+
+
+    }
+
+
+}
+
+
+
+
+
+
+// ======================
+// 邀請碼註冊
+// ======================
+
+
+
+async function register(){
+
+
+    let invite =
+    document
+    .getElementById("invite")
+    .value.trim();
+
+
+
+    let res =
+    await fetch(
+        API+"/register",
+        {
+
+
+        method:"POST",
+
+
+        headers:{
+
+        "Content-Type":
+        "application/json"
+
+        },
+
+
+        body:
+        JSON.stringify({
+
+        invite
+
+        })
+
+        }
+
+    );
+
+
+
+    let data =
+    await res.json();
+
+
+
+    if(data.success){
+
+
+
+        alert(
+
+        "激活成功\n帳號:"
+        +
+        data.account.username
+        +
+        "\n密碼:"
+        +
+        data.account.password
+
+        );
+
+
+
+        showLogin();
+
+
+
+    }
+
+    else{
+
+
+        alert(data.message);
+
+
+    }
+
+
+
+}
+
+
+
+
+// ======================
+// 進入系統
+// ======================
+
+
+function enterApp(){
+
+
+    document
+    .getElementById("navbar")
+    .classList
+    .remove("hidden");
+
+
+    showPage("home");
+
+
+}
+
+
+
+
+
+function logout(){
+
+
+    currentUser=null;
+
+
+    localStorage
+    .removeItem(
+        "currentUser"
+    );
+
+
+    document
+    .getElementById("navbar")
+    .classList
+    .add("hidden");
+
+
+    backMenu();
+
+
+}
+
+
+
+
+// ======================
+// 成員列表
+// ======================
+
+
+async function loadMembers(){
+
+
+    let res =
+    await fetch(
+    API+"/members"
+    );
+
+
+    let members =
+    await res.json();
+
+
+
+    document
+    .getElementById("memberList")
+    .innerHTML =
+
+    members.map(m=>`
+
+    <div class="post">
+
+    <b>
+    ${m.username}
+    </b>
+
+    <br>
+
+    等級：
+    ${m.level}
+
+    <br>
+
+    ${m.bio}
+
+    </div>
+
+
+    `).join("");
+
+
+
+}
+
+
+
+
+
+// ======================
+// 個人資料
+// ======================
+
+
+function showProfile(){
+
+
+    if(!currentUser)
+    return;
+
+
+
+    document
+    .getElementById("profileCard")
+    .innerHTML=
+
+    `
+
+    <div class="post">
+
+    <h2>
+    ${currentUser.username}
+    </h2>
+
+
+    <p>
+    等級：
+    ${currentUser.level}
+    </p>
+
+
+    <p>
+    ${currentUser.bio}
+    </p>
+
+
+    </div>
+
+    `;
+
+
+
+}
+
+
+
+// ======================
+// 動態牆系統
+// ======================
+
+
+// 取得文章
+
+async function loadPosts(){
+
+
+    let res =
+    await fetch(
+        API+"/posts"
+    );
+
+
+    let posts =
+    await res.json();
+
+
+
+    const box =
+    document.getElementById("feed");
+
+
+
+    if(posts.length===0){
+
+
+        box.innerHTML =
+        `
+
+        <div class="empty">
+
+        目前沒有文章
+
+        </div>
+
+        `;
+
+
+        return;
+
+    }
+
+
+
+    box.innerHTML =
+
+    posts
+    .slice()
+    .reverse()
+    .map(post=>{
+
+
+        let liked =
+        post.likedBy.includes(
+            currentUser.username
+        );
+
+
+
+        return `
+
+
+        <div class="post">
+
+
+        <b>
+        ${post.author}
+        </b>
+
+
+        <p>
+        ${post.content}
+        </p>
+
+
+        <div class="meta">
+
+        ${post.time}
+
+        </div>
+
+
+
+        <div class="action">
+
+
+        <button
+        onclick="likePost(${post.id})"
+        class="${liked?'liked':''}">
+
+        ❤️ ${post.likes}
+
+        </button>
+
+
+
+        ${
+        post.author===currentUser.username
+
+        ?
+
+        `
+
+        <button
+        onclick="deletePost(${post.id})">
+
+        刪除
+
+        </button>
+
+        `
+
+        :""
+
+        }
+
+
+
+        </div>
+
+
+        </div>
+
+
+        `;
+
+
+    })
+    .join("");
+
+}
+
+
+
+
+// 發文
+
+
+async function createPost(){
+
+
+    let input =
+    document
+    .getElementById("postInput");
+
+
+
+    let text =
+    input.value.trim();
+
+
+
+    if(text===""){
+
+        alert(
+        "內容不能為空"
+        );
+
+        return;
+
+    }
+
+
+
+
+    await fetch(
+        API+"/posts",
+        {
+
+        method:"POST",
+
+        headers:{
+
+        "Content-Type":
+        "application/json"
+
+        },
+
+
+        body:
+        JSON.stringify({
+
+        author:
+        currentUser.username,
+
+
+        content:
+        text
+
+
+        })
+
+
+        }
+
+    );
+
+
+
+    input.value="";
+
+
+    loadPosts();
+
+
+}
+
+
+
+
+
+
+// 點讚
+
+
+async function likePost(id){
+
+
+
+    await fetch(
+
+        API+"/posts/"+id+"/like",
+
+        {
+
+        method:"POST",
+
+
+        headers:{
+
+        "Content-Type":
+        "application/json"
+
+        },
+
+
+        body:
+        JSON.stringify({
+
+        user:
+        currentUser.username
+
+        })
+
+
+        }
+
+    );
+
+
+
+    loadPosts();
+
+
+
+}
+
+
+
+
+
+// 刪除文章
+
+
+async function deletePost(id){
+
+
+
+    if(
+    !confirm(
+    "確定刪除?"
+    )
+    )
+    return;
+
+
+
+    await fetch(
+
+        API+"/posts/"+id,
+
+        {
+
+        method:"DELETE"
+
+        }
+
+    );
+
+
+
+    loadPosts();
+
+
+
+}
+</script>
+
+</body>
+</html>
