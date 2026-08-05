@@ -155,11 +155,26 @@ button:hover{
 }
 
     #confirmBox{
+
     position:fixed;
+
     top:40%;
     left:50%;
+
     transform:translate(-50%,-50%);
+
     z-index:999;
+
+    background:#111;
+
+    border:1px solid #00ff88;
+
+    border-radius:12px;
+
+    padding:20px;
+
+    box-shadow:0 0 20px #00ff8877;
+
     }
 
 
@@ -549,13 +564,26 @@ Español
 
 
 
-<div class="bottom-nav hidden" id="navbar">
+</div>
 
-    <div id="confirmBox" class="hidden">
+
+<div id="confirmBox" class="hidden">
+
 <p>確定刪除?</p>
-<button onclick="confirmDelete(true)">Y</button>
-<button onclick="confirmDelete(false)">N</button>
-    </div>
+
+<button onclick="confirmDelete(true)">
+Y
+</button>
+
+<button onclick="confirmDelete(false)">
+N
+</button>
+
+</div>
+
+
+
+<div class="bottom-nav hidden" id="navbar">
 
 
 <button class="nav-btn"
@@ -1099,7 +1127,11 @@ async function register(){
 
 
 
-    let res =
+    let res;
+
+try{
+
+    res =
     await fetch(
         API+"/register",
         {
@@ -1119,9 +1151,18 @@ async function register(){
         }
     );
 
+}
+
+catch(e){
+
+    alert("伺服器連接失敗");
+
+    return;
+
+}
 
 
-    let data =
+let data =
     await res.json();
 
 
