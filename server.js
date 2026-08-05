@@ -99,6 +99,30 @@ app.get("/",(req,res)=>{
 
 });
 
+app.get("/clear-posts",(req,res)=>{
+
+    db.query(
+        "DELETE FROM posts",
+        [],
+        (err)=>{
+
+            if(err){
+
+                return res.send(
+                    "清除失敗"
+                );
+
+            }
+
+            res.send(
+                "文章已清除"
+            );
+
+        }
+    );
+
+});
+
 
 
 // ======================
