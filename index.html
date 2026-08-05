@@ -457,8 +457,7 @@ placeholder="自定義密碼">
 
 <textarea
 id="postInput"
-rows="4"
-placeholder="發布新的訊息...">
+rows="4">
 </textarea>
 
 
@@ -644,6 +643,12 @@ logout:"登出",
 
 membersTitle:"👥 成員",
 
+postPlaceholder:"發布新的訊息...",
+
+commentList:"回覆列表",
+
+inputReply:"輸入新回覆",
+
 error:"操作失敗"
 
 },
@@ -702,6 +707,12 @@ settingsTitle:"⚙ Configuración",
 createAccount:"Crear cuenta",
 
 membersTitle:"👥 Miembros",
+
+postPlaceholder:"Publicar un nuevo mensaje...",
+
+commentList:"Lista de respuestas",
+
+inputReply:"Escribe una respuesta",
 
 error:"Operación fallida"
 
@@ -801,6 +812,10 @@ lang[currentLang].homeTitle;
 
 document.getElementById("membersTitle").innerText =
 lang[currentLang].membersTitle;
+
+
+document.getElementById("postInput").placeholder =
+lang[currentLang].postPlaceholder;
 
 }
 
@@ -1588,13 +1603,13 @@ async function showComments(id){
 
 
     let reply =
-    prompt(
-        "回覆列表：\n\n"
-        +
-        text
-        +
-        "\n輸入新回覆："
-    );
+prompt(
+    lang[currentLang].commentList+
+    "\n\n"+
+    text+
+    "\n"+
+    lang[currentLang].inputReply
+);
 
 
     if(reply){
