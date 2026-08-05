@@ -649,6 +649,14 @@ commentList:"回覆列表",
 
 inputReply:"輸入新回覆",
 
+confirmDelete:"確定刪除?",
+
+emptyContent:"內容不能為空",
+
+authReject:"身份驗證拒絕",
+
+registerSuccess:"註冊成功\n帳號：",
+
 error:"操作失敗"
 
 },
@@ -713,6 +721,14 @@ postPlaceholder:"Publicar un nuevo mensaje...",
 commentList:"Lista de respuestas",
 
 inputReply:"Escribe una respuesta",
+
+confirmDelete:"¿Confirmar eliminación?",
+
+emptyContent:"El contenido no puede estar vacío",
+
+authReject:"Autenticación rechazada",
+
+registerSuccess:"Registro exitoso\nCuenta:",
 
 error:"Operación fallida"
 
@@ -1029,8 +1045,8 @@ async function login(){
 
 
         alert(
-        "身份驗證拒絕"
-        );
+lang[currentLang].authReject
+);
 
 
     }
@@ -1099,8 +1115,9 @@ async function register(){
     if(data.success){
 
         alert(
-            "註冊成功\n帳號："+username
-        );
+lang[currentLang].registerSuccess
++username
+);
 
 
         showLogin();
@@ -1432,8 +1449,8 @@ async function createPost(){
     if(text===""){
 
         alert(
-        "內容不能為空"
-        );
+lang[currentLang].emptyContent
+);
 
         return;
 
@@ -1545,12 +1562,9 @@ async function deletePost(id){
 
 
 
-    if(
-    !confirm(
-    "確定刪除?"
-    )
-    )
-    return;
+    confirm(
+lang[currentLang].confirmDelete
+)
 
 
 
