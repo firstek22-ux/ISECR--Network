@@ -399,12 +399,10 @@ placeholder="密碼">
 
 <!-- 註冊 -->
 
-
 <div class="box hidden" id="register">
 
-
 <h2>
-新成員激活
+新成員註冊
 </h2>
 
 
@@ -412,11 +410,20 @@ placeholder="密碼">
 placeholder="邀請碼">
 
 
+<input id="regName"
+placeholder="自定義用戶名">
+
+
+<input id="regPass"
+type="password"
+placeholder="自定義密碼">
+
+
 <br>
 
 
 <button onclick="register()">
-激活
+建立帳號
 </button>
 
 
@@ -795,11 +802,24 @@ async function login(){
 
 async function register(){
 
+async function register(){
 
     let invite =
     document
     .getElementById("invite")
     .value.trim();
+
+
+    let username =
+    document
+    .getElementById("regName")
+    .value.trim();
+
+
+    let password =
+    document
+    .getElementById("regPass")
+    .value;
 
 
 
@@ -808,26 +828,67 @@ async function register(){
         API+"/register",
         {
 
+            method:"POST",
 
-        method:"POST",
+            headers:{
 
+                "Content-Type":
+                "application/json"
 
-        headers:{
-
-        "Content-Type":
-        "application/json"
-
-        },
+            },
 
 
-        body:
-        JSON.stringify({
+            body:
+            JSON.stringify({
 
-        invite
+                invite,
+                username,
+                password
 
-        })
+            })
 
         }
+    );
+
+
+
+    let data =
+    await res.json();
+
+
+
+    if(data.success){
+
+
+        alert(
+            "註冊成功\n帳號："
+            +
+            username
+        );
+
+
+        showLogin();
+
+
+        document
+        .getElementById("loginName")
+        .value =
+        username;
+
+
+    }
+
+    else{
+
+
+        alert(
+            data.message
+        );
+
+
+    }
+
+}
 
     );
 
