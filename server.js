@@ -218,7 +218,19 @@ app.post("/api/register",(req,res)=>{
 
 
 
-    members.push(user);
+    db.run(
+`
+INSERT INTO members
+(username,password,level,bio)
+VALUES(?,?,?,?)
+`,
+[
+username,
+password,
+"C1",
+"ISECR 新成員"
+]
+);
 
 
     code.used=true;
