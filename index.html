@@ -1324,6 +1324,77 @@ async function deletePost(id){
 
 
 }
+
+
+
+async function showComments(id){
+
+    let res =
+    await fetch(
+        API+"/posts/"+id+"/comments"
+    );
+
+
+    let comments =
+    await res.json();
+
+
+    let text = "";
+
+
+    comments.forEach(c=>{
+
+        text +=
+        c.author+
+        ": "+
+        c.content+
+        "\n";
+
+    });
+
+
+    let reply =
+    prompt(
+        "回覆列表：\n\n"
+        +
+        text
+        +
+        "\n輸入新回覆："
+    );
+
+
+    if(reply){
+
+        await fetch(
+            API+"/posts/"+id+"/comments",
+            {
+
+            method:"POST",
+
+            headers:{
+                "Content-Type":"application/json"
+            },
+
+            body:JSON.stringify({
+
+                author:
+                currentUser.username,
+
+                content:
+                reply
+
+            })
+
+            }
+        );
+
+
+    }
+
+}
+
+
+
 </script>
 
 </body>
