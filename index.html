@@ -465,7 +465,7 @@ placeholder="發布新的訊息...">
 <br>
 
 
-<button onclick="createPost()">
+<button id="postButtonText" onclick="createPost()">
 發布
 </button>
 
@@ -620,8 +620,6 @@ reply:"回覆",
 
 delete:"刪除",
 
-logout:"登出",
-
 level:"等級",
 
 empty:"目前沒有文章",
@@ -687,7 +685,7 @@ empty:"No hay publicaciones",
 
 success:"Operación exitosa",
 
-hasAccount:"Tengo cuenta",
+hasAccount:"Ya tengo cuenta",
 
 loginTitle:"Inicio de sesión",
 
@@ -701,8 +699,6 @@ settingsTitle:"⚙ Configuración",
 
 createAccount:"Crear cuenta",
 
-logout:"Cerrar sesión",
-
 error:"Operación fallida"
 
 }
@@ -710,7 +706,8 @@ error:"Operación fallida"
 };
 
 
-let currentLang = "zh";
+let currentLang =
+localStorage.getItem("language") || "zh";
 
 
 let currentUser = null;
@@ -788,6 +785,10 @@ lang[currentLang].createAccount;
 
 document.getElementById("logoutText").innerText =
 lang[currentLang].logout;
+
+
+document.getElementById("postButtonText").innerText =
+lang[currentLang].post;
 
 }
 
