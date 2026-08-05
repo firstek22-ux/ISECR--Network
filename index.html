@@ -497,7 +497,7 @@ placeholder="發布新的訊息...">
 <div class="box hidden" id="members">
 
 
-<h2>
+<h2 id="membersTitle">
 👥 成員
 </h2>
 
@@ -642,6 +642,8 @@ createAccount:"建立帳號",
 
 logout:"登出",
 
+membersTitle:"👥 成員",
+
 error:"操作失敗"
 
 },
@@ -698,6 +700,8 @@ registerTitle:"Registro de nuevo miembro",
 settingsTitle:"⚙ Configuración",
 
 createAccount:"Crear cuenta",
+
+membersTitle:"👥 Miembros",
 
 error:"Operación fallida"
 
@@ -789,6 +793,14 @@ lang[currentLang].logout;
 
 document.getElementById("postButtonText").innerText =
 lang[currentLang].post;
+
+
+document.getElementById("homeTitle").innerText =
+lang[currentLang].homeTitle;
+
+
+document.getElementById("membersTitle").innerText =
+lang[currentLang].membersTitle;
 
 }
 
