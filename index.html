@@ -518,6 +518,19 @@ placeholder="發布新的訊息...">
 </h2>
 
 
+<button onclick="changeLanguage('zh')">
+繁體中文
+</button>
+
+
+<button onclick="changeLanguage('es')">
+Español
+</button>
+
+
+<br>
+
+
 <button onclick="logout()">
 登出
 </button>
@@ -568,7 +581,57 @@ onclick="showPage('settings')">
 
 const API = "https://isecr-network.onrender.com/api";
 
+
+// ======================
+// 語言系統
+// ======================
+
+const lang = {
+
+    zh:{
+        title:"ISECR INTERNAL NETWORK",
+        login:"登入",
+        register:"註冊",
+        home:"動態牆",
+        members:"成員",
+        profile:"個人資料",
+        settings:"設定",
+        post:"發布",
+        reply:"回覆"
+    },
+
+
+    es:{
+        title:"RED INTERNA ISECR",
+        login:"Iniciar sesión",
+        register:"Registrarse",
+        home:"Muro",
+        members:"Miembros",
+        profile:"Perfil",
+        settings:"Configuración",
+        post:"Publicar",
+        reply:"Responder"
+    }
+
+};
+
+
+let currentLang = "zh";
+
+
 let currentUser = null;
+
+    function changeLanguage(language){
+
+    currentLang = language;
+
+
+    alert(
+        "Language changed: "
+        + language
+    );
+
+    }
 
 
 
