@@ -347,7 +347,7 @@ ISECR INTERNAL NETWORK
 </h2>
 
 
-<button id="loginText" onclick="showLogin()">
+<button id="hasAccountText" onclick="showLogin()">
 已有帳號
 </button>
 
@@ -422,12 +422,12 @@ placeholder="自定義密碼">
 <br>
 
 
-<button onclick="register()">
+<button id="createAccountText" onclick="register()">
 建立帳號
 </button>
 
 
-<button onclick="backMenu()">
+<button id="backText" onclick="backMenu()">
 返回
 </button>
 
@@ -626,6 +626,8 @@ empty:"目前沒有文章",
 
 success:"操作成功",
 
+hasAccount:"已有帳號",
+
 error:"操作失敗"
 
 },
@@ -669,6 +671,8 @@ empty:"No hay publicaciones",
 
 success:"Operación exitosa",
 
+hasAccount:"Tengo cuenta",
+
 error:"Operación fallida"
 
 }
@@ -694,6 +698,10 @@ let currentUser = null;
     lang[currentLang].auth;
 
 
+    document.getElementById("hasAccountText").innerText =
+    lang[currentLang].hasAccount;
+
+
     document.getElementById("loginText").innerText =
     lang[currentLang].login;
 
@@ -701,7 +709,15 @@ let currentUser = null;
     document.getElementById("registerText").innerText =
     lang[currentLang].register;
 
-    }
+
+    document.getElementById("loginName").placeholder =
+    lang[currentLang].username;
+
+
+    document.getElementById("loginPass").placeholder =
+    lang[currentLang].password;
+
+}
 
 
 
