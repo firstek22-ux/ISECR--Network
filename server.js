@@ -400,7 +400,7 @@ app.post("/api/posts",(req,res)=>{
 `
 INSERT INTO posts
 
-(id,author,content,time,likes,likedBy)
+(id,author,content,time,likes,likedby)
 
 VALUES($1,$2,$3,$4,$5,$6)
 
