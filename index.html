@@ -799,9 +799,6 @@ async function login(){
 // ======================
 
 
-
-async function register(){
-
 async function register(){
 
     let invite =
@@ -831,20 +828,13 @@ async function register(){
             method:"POST",
 
             headers:{
-
-                "Content-Type":
-                "application/json"
-
+                "Content-Type":"application/json"
             },
 
-
-            body:
-            JSON.stringify({
-
+            body:JSON.stringify({
                 invite,
                 username,
                 password
-
             })
 
         }
@@ -859,11 +849,8 @@ async function register(){
 
     if(data.success){
 
-
         alert(
-            "註冊成功\n帳號："
-            +
-            username
+            "註冊成功\n帳號："+username
         );
 
 
@@ -872,70 +859,17 @@ async function register(){
 
         document
         .getElementById("loginName")
-        .value =
-        username;
+        .value = username;
 
 
     }
-
     else{
-
-
-        alert(
-            data.message
-        );
-
-
-    }
-
-}
-
-    );
-
-
-
-    let data =
-    await res.json();
-
-
-
-    if(data.success){
-
-
-
-        alert(
-
-        "激活成功\n帳號:"
-        +
-        data.account.username
-        +
-        "\n密碼:"
-        +
-        data.account.password
-
-        );
-
-
-
-        showLogin();
-
-
-
-    }
-
-    else{
-
 
         alert(data.message);
 
-
     }
 
-
-
 }
-
-
 
 
 // ======================
