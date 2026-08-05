@@ -416,17 +416,11 @@ function createPost() {
     return;
   }
 
-  posts.push({
-    id: Date.now(),
-    author: currentUser,
-    content: text,
-    time: new Date().toLocaleString(),
-    likes: 0,
-    likedBy: [],
-    comments: []
-  });
-
-  savePosts();
+  fetch("/api/posts", {
+ method:"POST",
+ body: JSON.stringify(post)
+})
+  
   input.value = "";
   showFeed();
 }
