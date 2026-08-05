@@ -321,7 +321,7 @@ app.get("/api/posts",(req,res)=>{
 
                 p.likedBy =
                 JSON.parse(
-                    p.likedBy || "[]"
+                    p.likedby || "[]"
                 );
 
             });
