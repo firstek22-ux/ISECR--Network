@@ -389,7 +389,7 @@ placeholder="密碼">
 </button>
 
 
-<button onclick="backMenu()">
+<button id="loginBackText" onclick="backMenu()">
 返回
 </button>
 
@@ -402,7 +402,8 @@ placeholder="密碼">
 
 <div class="box hidden" id="register">
 
-<h2>
+
+<h2 id="registerTitle">
 新成員註冊
 </h2>
 
@@ -514,7 +515,7 @@ placeholder="發布新的訊息...">
 <div class="box hidden" id="settings">
 
 
-<h2>
+<h2 id="settingsTitle">
 ⚙ 設定
 </h2>
 
@@ -635,6 +636,12 @@ back:"返回",
 
 homeTitle:"🏠 動態牆",
 
+registerTitle:"新成員註冊",
+
+settingsTitle:"⚙ 設定",
+
+invite:"邀請碼",
+
 error:"操作失敗"
 
 },
@@ -685,6 +692,12 @@ loginTitle:"Inicio de sesión",
 back:"Volver",
 
 homeTitle:"🏠 Muro",
+
+registerTitle:"Registro de nuevo miembro",
+
+settingsTitle:"⚙ Configuración",
+
+invite:"Código de invitación",
 
 error:"Operación fallida"
 
@@ -737,6 +750,30 @@ lang[currentLang].loginTitle;
 
 document.getElementById("backText").innerText =
 lang[currentLang].back;
+
+
+document.getElementById("loginBackText").innerText =
+lang[currentLang].back;
+
+
+document.getElementById("registerTitle").innerText =
+lang[currentLang].registerTitle;
+
+
+document.getElementById("settingsTitle").innerText =
+lang[currentLang].settingsTitle;
+
+
+document.getElementById("invite").placeholder =
+lang[currentLang].invite;
+
+
+document.getElementById("regName").placeholder =
+lang[currentLang].username;
+
+
+document.getElementById("regPass").placeholder =
+lang[currentLang].password;
 
 }
 
