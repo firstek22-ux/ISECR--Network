@@ -273,10 +273,7 @@ button:disabled {
 let currentUser = localStorage.getItem("currentUser") || "";
 let currentPostId = null;
 
-let members = JSON.parse(localStorage.getItem("members")) || [
-  { username: "LKSK",  password: "ARLY", invite: "KS",    used: false, level: "A6", bio: "ISECR 核心成員" },
-  { username: "R.exe", password: "RWW",  invite: "MYYQM", used: false, level: "B2", bio: "ISECR 技術部" }
-];
+fetch("/api/members")
 
 let posts = JSON.parse(localStorage.getItem("posts")) || [];
 
