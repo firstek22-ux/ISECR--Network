@@ -352,8 +352,9 @@ ISECR INTERNAL NETWORK
 </button>
 
 
-<button id="registerText" onclick="showRegister()">
+<button id="registerMenuText" onclick="showRegister()">
 註冊
+
 </button>
 
 
@@ -366,7 +367,7 @@ ISECR INTERNAL NETWORK
 <div class="box hidden" id="login">
 
 
-<h2>
+<h2 id="loginTitle">
 成員登入
 </h2>
 
@@ -383,7 +384,7 @@ placeholder="密碼">
 <br>
 
 
-<button id="loginText" onclick="login()">
+<button id="loginButtonText" onclick="login()">
 登入
 </button>
 
@@ -442,7 +443,7 @@ placeholder="自定義密碼">
 <div class="box hidden" id="home">
 
 
-<h2>
+<h2 id="homeTitle">
 🏠 ISECR 動態牆
 </h2>
 
@@ -628,6 +629,12 @@ success:"操作成功",
 
 hasAccount:"已有帳號",
 
+loginTitle:"成員登入",
+
+back:"返回",
+
+homeTitle:"🏠 動態牆",
+
 error:"操作失敗"
 
 },
@@ -673,6 +680,12 @@ success:"Operación exitosa",
 
 hasAccount:"Tengo cuenta",
 
+loginTitle:"Inicio de sesión",
+
+back:"Volver",
+
+homeTitle:"🏠 Muro",
+
 error:"Operación fallida"
 
 }
@@ -702,11 +715,11 @@ let currentUser = null;
     lang[currentLang].hasAccount;
 
 
-    document.getElementById("loginText").innerText =
+    document.getElementById("loginButtonText").innerText =
     lang[currentLang].login;
 
 
-    document.getElementById("registerText").innerText =
+    document.getElementById("registerMenuText").innerText =
     lang[currentLang].register;
 
 
@@ -716,6 +729,14 @@ let currentUser = null;
 
     document.getElementById("loginPass").placeholder =
     lang[currentLang].password;
+
+
+document.getElementById("loginTitle").innerText =
+lang[currentLang].loginTitle;
+
+
+document.getElementById("backText").innerText =
+lang[currentLang].back;
 
 }
 
