@@ -353,7 +353,7 @@ ISECR INTERNAL NETWORK
 
 
 <button id="registerText" onclick="showRegister()">
-新成員
+註冊
 </button>
 
 
@@ -383,7 +383,7 @@ placeholder="密碼">
 <br>
 
 
-<button onclick="login()">
+<button id="loginText" onclick="login()">
 登入
 </button>
 
@@ -590,6 +590,7 @@ const lang = {
 
     zh:{
         title:"ISECR INTERNAL NETWORK",
+        auth:"身份驗證",
         login:"登入",
         register:"註冊",
         home:"動態牆",
@@ -603,6 +604,7 @@ const lang = {
 
     es:{
         title:"RED INTERNA ISECR",
+        auth:"Autenticación",
         login:"Iniciar sesión",
         register:"Registrarse",
         home:"Muro",
@@ -626,21 +628,19 @@ let currentUser = null;
     currentLang = language;
 
 
-    document
-    .getElementById("titleText")
-    .innerText =
+    document.getElementById("titleText").innerText =
     lang[currentLang].title;
 
 
-    document
-    .getElementById("loginText")
-    .innerText =
+    document.getElementById("authText").innerText =
+    lang[currentLang].auth;
+
+
+    document.getElementById("loginText").innerText =
     lang[currentLang].login;
 
 
-    document
-    .getElementById("registerText")
-    .innerText =
+    document.getElementById("registerText").innerText =
     lang[currentLang].register;
 
     }
