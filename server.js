@@ -489,65 +489,83 @@ JSON.stringify(post.likedBy)
 app.post("/api/posts/:id/like",(req,res)=>{
 
 
-    const post =
-    posts.find(
-        p =>
-        p.id == req.params.id
+    const id = req.params.id;
+
+    const user = req.body.user;
+
+
+    db.get(
+        "SELECT * FROM posts WHERE id=?",
+        [id],
+        (err,post)=>{
+
+
+            if(!post){
+
+                return res.json({
+                    success:false
+                });
+
+            }
+
+
+            let likedBy =
+            JSON.parse(post.likedBy || "[]");
+
+
+            let likes =
+            post.likes;
+
+
+            if(likedBy.includes(user)){
+
+
+                likedBy =
+                likedBy.filter(
+                    u=>u!==user
+                );
+
+
+                likes--;
+
+
+            }
+            else{
+
+
+                likedBy.push(user);
+
+                likes++;
+
+            }
+
+
+
+            db.run(
+            `
+            UPDATE posts
+
+            SET likes=?,
+            likedBy=?
+
+            WHERE id=?
+
+            `,
+            [
+                likes,
+                JSON.stringify(likedBy),
+                id
+            ]);
+
+
+            res.json({
+                success:true
+            });
+
+
+        }
+
     );
-
-
-
-    if(!post){
-
-        return res.json({
-
-            success:false
-
-        });
-
-    }
-
-
-
-    const user =
-    req.body.user;
-
-
-
-    if(
-        post.likedBy.includes(user)
-    ){
-
-        post.likedBy =
-        post.likedBy.filter(
-            u => u !== user
-        );
-
-
-        post.likes--;
-
-
-    }
-
-    else{
-
-
-        post.likedBy.push(user);
-
-
-        post.likes++;
-
-
-    }
-
-
-
-    res.json({
-
-        success:true
-
-    });
-
 
 
 });
