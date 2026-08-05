@@ -1561,12 +1561,13 @@ async function likePost(id){
 async function deletePost(id){
 
 
-    if(
-    !confirm(
-    lang[currentLang].confirmDelete
-    )
-    )
-    return;
+    let answer = prompt("Y/N");
+
+if(
+    answer !== "Y" &&
+    answer !== "y"
+)
+return;
 
 
     await fetch(
