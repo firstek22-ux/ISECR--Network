@@ -1,76 +1,69 @@
 const express = require("express");
 const cors = require("cors");
-const sqlite3 = require("sqlite3").verbose();
-
-const db = new sqlite3.Database("./isecr.db");
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-db.run(`
-CREATE TABLE IF NOT EXISTS members(
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    username TEXT UNIQUE,
-    password TEXT,
-    level TEXT,
-    bio TEXT
-)
-`);
 
-
-db.run(`
-CREATE TABLE IF NOT EXISTS posts(
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    author TEXT,
-    content TEXT,
-    time TEXT,
-    likes INTEGER DEFAULT 0
-)
-`);
-
+// ======================
+// 臨時資料
+// ======================
 
 let invites = [
     {
-        code:"ISECR001",
-        used:false
+        code: "ISECR001",
+        used: false
     },
 
     {
-        code:"ISECR002",
-        used:false
+        code: "ISECR002",
+        used: false
+    },
+
+    {
+        code: "ISECR003",
+        used: false
     }
 ];
 
 
 let members = [
+
     {
-        username:"LKSK",
-        password:"ARLY",
-        level:"A6",
-        bio:"ISECR 核心成員"
+        username: "LKSK",
+        password: "ARLY",
+        level: "A6",
+        bio: "ISECR 核心成員"
     },
 
     {
-        username:"R.exe",
-        password:"RWW",
-        level:"B2",
-        bio:"ISECR 技術部"
+        username: "R.exe",
+        password: "RWW",
+        level: "B2",
+        bio: "ISECR 技術部"
     }
+
 ];
 
 
 let posts = [];
 
 
+
+// ======================
 // 測試
+// ======================
 
-app.get("/",(req,res)=>{
+app.get("/", (req,res)=>{
 
-    res.send("ISECR Server Online");
+    res.send(
+        "ISECR Server Online"
+    );
 
 });
+
 
 
 
@@ -81,14 +74,20 @@ app.get("/",(req,res)=>{
 app.post("/api/login",(req,res)=>{
 
 
+    const {
+        username,
+        password
+    } = req.body;
+
+
+
     const user =
     members.find(
-
         m =>
-        m.username === req.body.username &&
-        m.password === req.body.password
-
+        m.username === username &&
+        m.password === password
     );
+
 
 
     if(user){
@@ -107,7 +106,9 @@ app.post("/api/login",(req,res)=>{
 
         res.json({
 
-            success:false
+            success:false,
+
+            message:"帳號或密碼錯誤"
 
         });
 
@@ -127,16 +128,37 @@ app.post("/api/register",(req,res)=>{
 
 
     const {
+
         invite,
         username,
         password
+
     } = req.body;
 
 
 
-    let code =
+    if(
+        !invite ||
+        !username ||
+        !password
+    ){
+
+        return res.json({
+
+            success:false,
+
+            message:"資料不完整"
+
+        });
+
+    }
+
+
+
+    const code =
     invites.find(
-        i=>i.code===invite
+        i =>
+        i.code === invite
     );
 
 
@@ -169,17 +191,21 @@ app.post("/api/register",(req,res)=>{
 
 
 
-    if(
-        members.some(
-            m=>m.username===username
-        )
-    ){
+    const exists =
+    members.some(
+        m =>
+        m.username === username
+    );
+
+
+
+    if(exists){
 
         return res.json({
 
             success:false,
 
-            message:"名稱已存在"
+            message:"使用者名稱已存在"
 
         });
 
@@ -187,50 +213,27 @@ app.post("/api/register",(req,res)=>{
 
 
 
-    if(
-        !username ||
-        !password
-    ){
+    const newUser = {
 
-        return res.json({
-
-            success:false,
-
-            message:"資料不完整"
-
-        });
-
-    }
-
-
-
-    let user={
 
         username:username,
 
+
         password:password,
+
 
         level:"C1",
 
+
         bio:"ISECR 新成員"
+
 
     };
 
 
 
-    db.run(
-`
-INSERT INTO members
-(username,password,level,bio)
-VALUES(?,?,?,?)
-`,
-[
-username,
-password,
-"C1",
-"ISECR 新成員"
-]
-);
+    members.push(newUser);
+
 
 
     code.used=true;
@@ -241,7 +244,7 @@ password,
 
         success:true,
 
-        user:user
+        user:newUser
 
     });
 
@@ -253,13 +256,15 @@ password,
 
 
 // ======================
-// 成員
+// 成員列表
 // ======================
 
 app.get("/api/members",(req,res)=>{
 
 
-    res.json(members);
+    res.json(
+        members
+    );
 
 
 });
@@ -268,13 +273,15 @@ app.get("/api/members",(req,res)=>{
 
 
 // ======================
-// 文章
+// 文章列表
 // ======================
 
 app.get("/api/posts",(req,res)=>{
 
 
-    res.json(posts);
+    res.json(
+        posts
+    );
 
 
 });
@@ -282,24 +289,55 @@ app.get("/api/posts",(req,res)=>{
 
 
 
+// ======================
+// 發布文章
+// ======================
 
 app.post("/api/posts",(req,res)=>{
 
 
-    let post={
+    const {
+
+        author,
+
+        content
+
+    } = req.body;
+
+
+
+    if(!author || !content){
+
+        return res.json({
+
+            success:false
+
+        });
+
+    }
+
+
+
+    const post = {
 
 
         id:Date.now(),
 
-        author:req.body.author,
 
-        content:req.body.content,
+        author:author,
+
+
+        content:content,
+
 
         time:new Date().toLocaleString(),
 
+
         likes:0,
 
+
         likedBy:[]
+
 
     };
 
@@ -311,13 +349,14 @@ app.post("/api/posts",(req,res)=>{
 
     res.json({
 
-        success:true
+        success:true,
+
+        post:post
 
     });
 
 
 });
-
 
 
 
@@ -329,21 +368,28 @@ app.post("/api/posts",(req,res)=>{
 app.post("/api/posts/:id/like",(req,res)=>{
 
 
-    let post =
+    const post =
     posts.find(
-        p=>p.id==req.params.id
+        p =>
+        p.id == req.params.id
     );
 
 
 
-    if(!post)
-    return res.json({
-        success:false
-    });
+    if(!post){
+
+        return res.json({
+
+            success:false
+
+        });
+
+    }
 
 
 
-    let user=req.body.user;
+    const user =
+    req.body.user;
 
 
 
@@ -353,18 +399,23 @@ app.post("/api/posts/:id/like",(req,res)=>{
 
         post.likedBy =
         post.likedBy.filter(
-            u=>u!==user
+            u => u !== user
         );
 
+
         post.likes--;
+
 
     }
 
     else{
 
+
         post.likedBy.push(user);
 
+
         post.likes++;
+
 
     }
 
@@ -375,6 +426,7 @@ app.post("/api/posts/:id/like",(req,res)=>{
         success:true
 
     });
+
 
 
 });
@@ -392,9 +444,11 @@ app.delete("/api/posts/:id",(req,res)=>{
     posts =
     posts.filter(
 
-        p=>p.id!=req.params.id
+        p =>
+        p.id != req.params.id
 
     );
+
 
 
     res.json({
@@ -404,16 +458,29 @@ app.delete("/api/posts/:id",(req,res)=>{
     });
 
 
+
 });
 
 
 
 
+// ======================
+// 啟動
+// ======================
 
-app.listen(3000,()=>{
+const PORT =
+process.env.PORT || 3000;
+
+
+app.listen(PORT,()=>{
+
 
     console.log(
-        "ISECR Server running"
+
+        "ISECR Server running on "
+        + PORT
+
     );
+
 
 });
