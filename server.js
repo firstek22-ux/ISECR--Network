@@ -1,10 +1,34 @@
 const express = require("express");
 const cors = require("cors");
+const sqlite3 = require("sqlite3").verbose();
+
+const db = new sqlite3.Database("./isecr.db");
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+
+db.run(`
+CREATE TABLE IF NOT EXISTS members(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT UNIQUE,
+    password TEXT,
+    level TEXT,
+    bio TEXT
+)
+`);
+
+
+db.run(`
+CREATE TABLE IF NOT EXISTS posts(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    author TEXT,
+    content TEXT,
+    time TEXT,
+    likes INTEGER DEFAULT 0
+)
+`);
 
 
 let invites = [
