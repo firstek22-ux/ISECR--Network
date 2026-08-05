@@ -332,7 +332,7 @@ button:hover{
 <body>
 
 
-<h1>
+<h1 id="titleText">
 ISECR INTERNAL NETWORK
 </h1>
 
@@ -626,10 +626,11 @@ let currentUser = null;
     currentLang = language;
 
 
-    alert(
-        "Language changed: "
-        + language
-    );
+    document
+    .getElementById("titleText")
+    .innerText =
+    lang[currentLang].title;
+
 
     }
 
