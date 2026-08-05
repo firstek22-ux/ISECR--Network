@@ -50,6 +50,70 @@ let members = [
 
 let posts = [];
 
+let comments = [];
+
+// ======================
+// 回覆文章
+// ======================
+
+app.post("/api/posts/:id/comments",(req,res)=>{
+
+    const {
+        author,
+        content
+    } = req.body;
+
+
+    const comment = {
+
+        id: Date.now(),
+
+        postId: req.params.id,
+
+        author,
+
+        content,
+
+        time:new Date().toLocaleString()
+
+    };
+
+
+    comments.push(comment);
+
+
+    res.json({
+
+        success:true,
+
+        comment
+
+    });
+
+
+});
+
+
+
+// ======================
+// 取得文章回覆
+// ======================
+
+app.get("/api/posts/:id/comments",(req,res)=>{
+
+
+    const result =
+    comments.filter(
+        c =>
+        c.postId == req.params.id
+    );
+
+
+    res.json(result);
+
+
+});
+
 
 
 // ======================
