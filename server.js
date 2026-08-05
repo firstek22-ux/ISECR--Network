@@ -363,11 +363,30 @@ app.get("/api/members",(req,res)=>{
 
 app.get("/api/posts",(req,res)=>{
 
+    db.all(
+        "SELECT * FROM posts",
+        [],
+        (err,rows)=>{
 
-    res.json(
-        posts
+            if(err){
+
+                return res.json([]);
+
+            }
+
+
+            rows.forEach(p=>{
+
+                p.likedBy =
+                JSON.parse(p.likedBy || "[]");
+
+            });
+
+
+            res.json(rows);
+
+        }
     );
-
 
 });
 
@@ -428,7 +447,24 @@ app.post("/api/posts",(req,res)=>{
 
 
 
-    posts.push(post);
+    db.run(
+
+`
+INSERT INTO posts
+(id,author,content,time,likes,likedBy)
+VALUES(?,?,?,?,?,?)
+`,
+
+[
+post.id,
+post.author,
+post.content,
+post.time,
+post.likes,
+JSON.stringify(post.likedBy)
+]
+
+);
 
 
 
