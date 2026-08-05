@@ -315,6 +315,8 @@ app.get("/api/posts",(req,res)=>{
             const posts =
             result.rows;
 
+console.log(posts);
+
 
 
             posts.forEach(p=>{
