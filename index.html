@@ -1353,7 +1353,7 @@ async function loadPosts(){
         </button>
 
         <button onclick="showComments(${post.id})">
-💬 回覆
+💬 ${lang[currentLang].reply}
 </button>
 
 
@@ -1366,11 +1366,11 @@ async function loadPosts(){
         `
 
         <button
-        onclick="deletePost(${post.id})">
+onclick="deletePost(${post.id})">
 
-        刪除
+${lang[currentLang].delete}
 
-        </button>
+</button>
 
         `
 
