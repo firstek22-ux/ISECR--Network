@@ -1,9 +1,14 @@
-const sqlite3 = require("sqlite3").verbose();
+const { Pool } = require("pg");
 
+const pool = new Pool({
 
-const db = new sqlite3.Database(
-    "./isecr.db"
-);
+    connectionString:
+    process.env.DATABASE_URL,
 
+    ssl:{
+        rejectUnauthorized:false
+    }
 
-module.exports = db;
+});
+
+module.exports = pool;
