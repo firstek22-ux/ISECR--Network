@@ -320,7 +320,8 @@ ISECR SYSTEM ONLINE
 
 
 <script>
-
+    
+let adminUsername = "";
 
     async function loadAdminPosts(){
 
@@ -561,6 +562,7 @@ data.success &&
 data.user.level==="ADMIN"
 
 ){
+    adminUsername = username;
 
 
 
