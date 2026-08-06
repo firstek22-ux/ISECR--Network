@@ -352,9 +352,9 @@ message:"邀請碼已使用"
 db.query(
 `
 INSERT INTO users
-(username,password)
+(username,password,level,bio)
 
-VALUES($1,$2)
+VALUES($1,$2,'C1','ISECR 新成員')
 
 `,
 [
