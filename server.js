@@ -175,21 +175,46 @@ app.post("/api/login",(req,res)=>{
     } = req.body;
 
 
-    SELECT * FROM users
-WHERE username=$1 AND password=$2
+    db.query(
+
+`
+SELECT *
+FROM users
+WHERE username=$1
+AND password=$2
+`,
+
+[
+    username,
+    password
+],
+
+(err,result)=>{
 
 
-    if(user){
+    if(err){
+
+        console.log(err);
+
+        return res.json({
+            success:false
+        });
+
+    }
+
+
+    if(result.rows.length>0){
 
         res.json({
 
             success:true,
 
-            user:user
+            user:result.rows[0]
 
         });
 
     }
+
     else{
 
         res.json({
@@ -202,10 +227,14 @@ WHERE username=$1 AND password=$2
 
     }
 
+
 });
 
 
+});
 
+
+//累死我了幹
 
 // ======================
 // 註冊
