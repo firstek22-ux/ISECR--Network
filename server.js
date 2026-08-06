@@ -795,6 +795,95 @@ success:true
 
 
 
+
+// ======================
+// 成員列表
+// ======================
+
+app.get("/api/members",(req,res)=>{
+
+
+db.query(
+`
+SELECT username,level,bio
+FROM users
+`,
+[],
+(err,result)=>{
+
+
+if(err){
+
+console.log(err);
+
+return res.json([]);
+
+}
+
+
+res.json(
+result.rows
+);
+
+
+});
+
+
+});
+
+
+
+
+// ======================
+// 文章列表
+// ======================
+
+app.get("/api/posts",(req,res)=>{
+
+
+db.query(
+`
+SELECT *
+FROM posts
+ORDER BY id DESC
+`,
+[],
+(err,result)=>{
+
+
+if(err){
+
+console.log(err);
+
+return res.json([]);
+
+}
+
+
+
+const posts=result.rows;
+
+
+posts.forEach(p=>{
+
+p.likedBy=
+JSON.parse(
+p.likedby || "[]"
+);
+
+});
+
+
+res.json(posts);
+
+
+});
+
+
+});
+
+
+
 // ======================
 // 啟動伺服器
 // ======================
