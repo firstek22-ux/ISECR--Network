@@ -327,23 +327,51 @@ app.post("/api/register",(req,res)=>{
 
     const newUser = {
 
-        username,
+    username,
 
-        password,
+    password,
 
-        level:"C1",
+    level:"C1",
 
-        bio:"ISECR 新成員"
+    bio:"ISECR 新成員"
 
-    };
+};
 
 
-    INSERT INTO users
+
+db.query(
+`
+INSERT INTO users
 (username,password,level,bio)
-VALUES(...)
+
+VALUES($1,$2,$3,$4)
+
+`,
+[
+    username,
+    password,
+    "C1",
+    "ISECR 新成員"
+],
+
+(err)=>{
+
+    if(err){
+
+        console.log(err);
+
+        return res.json({
+
+            success:false,
+
+            message:"建立帳號失敗"
+
+        });
+
+    }
+
 
     code.used=true;
-
 
 
     res.json({
@@ -355,7 +383,9 @@ VALUES(...)
     });
 
 
-});
+}
+
+);
 
 
 
