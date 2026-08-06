@@ -322,6 +322,148 @@ ISECR SYSTEM ONLINE
 <script>
 
 
+    async function loadAdminPosts(){
+
+
+let res = await fetch(
+API+"/posts"
+);
+
+
+let posts = await res.json();
+
+
+
+let box =
+document.getElementById("postList");
+
+
+
+if(posts.length===0){
+
+box.innerHTML="沒有文章";
+
+return;
+
+}
+
+
+
+box.innerHTML = posts.map(post=>`
+
+
+<div class="status">
+
+
+<b>
+作者：
+${post.author}
+</b>
+
+
+<p>
+${post.content}
+</p>
+
+
+小時：
+${post.time}
+
+
+<br>
+
+
+<button onclick="adminDelete(${post.id})">
+
+刪除
+
+</button>
+
+
+</div>
+
+
+`).join("");
+
+
+
+}
+
+
+
+
+
+async function adminDelete(id){
+
+
+if(!confirm("確定刪除這篇文章？")){
+
+return;
+
+}
+
+
+
+let res =
+await fetch(
+
+API+"/posts/"+id,
+
+{
+
+method:"DELETE",
+
+
+headers:{
+
+"Content-Type":"application/json"
+
+},
+
+
+body:JSON.stringify({
+
+username:"admin"
+
+})
+
+
+}
+
+);
+
+
+
+let data =
+await res.json();
+
+
+
+if(data.success){
+
+
+alert("刪除成功");
+
+loadAdminPosts();
+
+
+}
+
+else{
+
+
+alert(
+"刪除失敗："+data.message
+);
+
+
+}
+
+
+
+}
+
+
 const API =
 
 "https://isecr-network.onrender.com/api";
