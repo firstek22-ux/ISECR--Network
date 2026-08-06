@@ -593,6 +593,123 @@ app.post("/api/posts/:id/like",(req,res)=>{
 
 
 // ======================
+// 評論系統
+// ======================
+
+
+app.post("/api/posts/:id/comments",(req,res)=>{
+
+
+    const {
+        author,
+        content
+    } = req.body;
+
+
+    const comment = {
+
+        id:Date.now(),
+
+        postId:req.params.id,
+
+        author,
+
+        content,
+
+        time:new Date().toLocaleString()
+
+    };
+
+
+    db.query(
+`
+INSERT INTO comments
+(id,postId,author,content,time)
+VALUES($1,$2,$3,$4,$5)
+`,
+[
+comment.id,
+comment.postId,
+comment.author,
+comment.content,
+comment.time
+],
+
+(err)=>{
+
+
+    if(err){
+
+        console.log(err);
+
+        return res.json({
+
+            success:false
+
+        });
+
+    }
+
+
+    res.json({
+
+        success:true,
+
+        comment
+
+    });
+
+
+});
+
+
+});
+
+
+
+
+
+app.get("/api/posts/:id/comments",(req,res)=>{
+
+
+    db.query(
+`
+SELECT *
+FROM comments
+WHERE postId=$1
+`,
+[
+req.params.id
+],
+
+(err,result)=>{
+
+
+    if(err){
+
+        console.log(err);
+
+        return res.json([]);
+
+    }
+
+
+    res.json(
+
+        result.rows
+
+    );
+
+
+});
+
+
+});
+
+
+
+
+// ======================
 // 刪除文章
 // ======================
 
