@@ -980,6 +980,26 @@ result.rows
 app.delete("/api/posts/:id",(req,res)=>{
 
 
+const username=req.body.username;
+
+
+checkAdmin(username,(isAdmin)=>{
+
+
+if(!isAdmin){
+
+return res.json({
+
+success:false,
+
+message:"權限不足"
+
+});
+
+}
+
+
+
 const id=req.params.id;
 
 
@@ -988,9 +1008,7 @@ db.query(
 
 `
 DELETE FROM posts
-
 WHERE id=$1
-
 `
 
 ,
@@ -1023,6 +1041,9 @@ success:true
 
 
 );
+
+
+});
 
 
 });
@@ -1064,6 +1085,48 @@ result.rows
 
 
 });
+
+
+
+
+// ======================
+// 權限檢查
+// ======================
+
+function checkAdmin(username, callback){
+
+    db.query(
+    `
+    SELECT level
+    FROM users
+    WHERE username=$1
+    `,
+    [
+        username
+    ],
+    (err,result)=>{
+
+
+        if(err || result.rows.length===0){
+
+            return callback(false);
+
+        }
+
+
+        if(result.rows[0].level==="ADMIN"){
+
+            return callback(true);
+
+        }
+
+
+        callback(false);
+
+
+    });
+
+}
 
 
 
