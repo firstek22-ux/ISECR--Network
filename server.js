@@ -14,7 +14,7 @@ app.use(express.json());
 // 臨時刪除帳號
 // ======================
 
-app.delete("/api/delete-user/:username",(req,res)=>{
+app.get("/api/delete-user/:username",(req,res)=>{
 
     db.query(
         `
