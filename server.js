@@ -304,24 +304,6 @@ app.post("/api/register",(req,res)=>{
     }
 
 
-    const exists =
-    members.some(
-        m =>
-        m.username === username
-    );
-
-
-    if(exists){
-
-        return res.json({
-
-            success:false,
-
-            message:"使用者名稱已存在"
-
-        });
-
-    }
 
 
 
@@ -387,8 +369,10 @@ VALUES($1,$2,$3,$4)
 
 );
 
+    });
 
 
+//我真服了，有bug為什麼代碼不能自己把自己修好啊
 
 // ======================
 // 成員列表
