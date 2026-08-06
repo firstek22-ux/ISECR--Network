@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>ISECR Admin</title>
+
+
+<style>
+
+body{
+
+background:#111;
+
+color:#00ff88;
+
+font-family:sans-serif;
+
+text-align:center;
+
+}
+
+
+.box{
+
+border:1px solid #00ff88;
+
+padding:20px;
+
+margin:20px;
+
+border-radius:10px;
+
+}
+
+
+button{
+
+background:#111;
+
+color:#00ff88;
+
+border:1px solid #00ff88;
+
+padding:10px;
+
+border-radius:8px;
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<h1>
+🛡 ISECR ADMIN CENTER
+</h1>
+
+
+<div class="box">
+
+
+<h2>
+管理員登入
+</h2>
+
+
+<input id="name"
+placeholder="帳號">
+
+
+<br>
+
+
+<input id="pass"
+type="password"
+placeholder="密碼">
+
+
+<br>
+
+
+<button onclick="loginAdmin()">
+
+登入
+
+</button>
+
+
+</div>
+
+
+
+<div class="box" id="panel"
+style="display:none">
+
+
+<h2>
+控制台
+</h2>
+
+
+<p>
+管理員已登入
+</p>
+
+
+</div>
+
+
+
+
+<script>
+
+
+const API =
+"https://isecr-network.onrender.com/api";
+
+
+
+async function loginAdmin(){
+
+
+let username =
+document.getElementById("name").value;
+
+
+let password =
+document.getElementById("pass").value;
+
+
+
+let res =
+await fetch(
+API+"/login",
+{
+
+method:"POST",
+
+headers:{
+
+"Content-Type":
+"application/json"
+
+},
+
+body:JSON.stringify({
+
+username,
+
+password
+
+})
+
+}
+
+);
+
+
+
+let data =
+await res.json();
+
+
+
+if(
+data.success &&
+data.user.level==="ADMIN"
+){
+
+
+document
+.getElementById("panel")
+.style.display="block";
+
+
+alert("管理員登入成功");
+
+
+}
+
+else{
+
+
+alert("權限不足");
+
+
+}
+
+
+
+}
+
+
+</script>
+
+
+</body>
+
+</html>
