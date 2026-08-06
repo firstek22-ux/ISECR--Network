@@ -258,7 +258,6 @@ user:result.rows[0]
 // 註冊
 // ======================
 
-
 app.post("/api/register",(req,res)=>{
 
 
@@ -306,9 +305,13 @@ invite
 
 if(err){
 
+console.log(err);
+
 return res.json({
 
-success:false
+success:false,
+
+message:"資料庫錯誤"
 
 });
 
@@ -349,23 +352,60 @@ message:"邀請碼已使用"
 
 
 
+// ======================
+// 隨機成員等級
+// ======================
+
+const levels = [
+
+"C1",
+
+"C2",
+
+"B1",
+
+"B2"
+
+];
+
+
+const randomLevel =
+
+levels[Math.floor(Math.random()*levels.length)];
+
+
+
+
+
+// ======================
+// 建立帳號
+// ======================
+
+
 db.query(
 `
 INSERT INTO users
+
 (username,password,level,bio)
 
-VALUES($1,$2,'C1','ISECR 新成員')
+VALUES($1,$2,$3,'ISECR 新成員')
 
 `,
 [
 username,
-password
+
+password,
+
+randomLevel
+
 ],
 
 (err)=>{
 
 
 if(err){
+
+console.log(err);
 
 return res.json({
 
@@ -380,7 +420,6 @@ message:"帳號建立失敗"
 
 
 db.query(
-
 `
 UPDATE invites
 
@@ -391,17 +430,40 @@ WHERE id=$1
 `,
 [
 inviteData.id
-]
+],
 
-);
+(updateErr)=>{
+
+
+if(updateErr){
+
+console.log(updateErr);
+
+return res.json({
+
+success:false,
+
+message:"邀請碼更新失敗"
+
+});
+
+}
 
 
 
 res.json({
 
-success:true
+success:true,
+
+level:randomLevel
 
 });
+
+
+}
+
+);
+
 
 
 }
