@@ -5,10 +5,18 @@
 
 <meta charset="UTF-8">
 
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>ISECR Admin</title>
 
 
 <style>
+
+
+*{
+    box-sizing:border-box;
+}
+
 
 body{
 
@@ -16,41 +24,193 @@ background:#111;
 
 color:#00ff88;
 
-font-family:sans-serif;
+font-family:
+
+-apple-system,
+"Segoe UI",
+"PingFang TC",
+"Microsoft JhengHei",
+sans-serif;
 
 text-align:center;
+
+margin:0;
+
+padding:20px;
+
+}
+
+
+h1{
+
+font-size:24px;
+
+text-shadow:
+
+0 0 10px #00ff8877;
 
 }
 
 
 .box{
 
-border:1px solid #00ff88;
+
+width:92%;
+
+max-width:420px;
+
+margin:20px auto;
 
 padding:20px;
 
-margin:20px;
+border:1px solid #00ff88;
 
-border-radius:10px;
+border-radius:12px;
+
+background:#0d0d0d;
+
+box-shadow:
+
+0 0 15px #00ff8833;
+
 
 }
 
 
+
+input{
+
+
+width:90%;
+
+max-width:320px;
+
+padding:12px;
+
+margin:10px;
+
+background:#1a1a1a;
+
+color:#00ff88;
+
+border:
+
+1px solid #00ff88;
+
+border-radius:8px;
+
+font-size:16px;
+
+}
+
+
+
 button{
+
+
+width:120px;
+
+padding:12px;
+
+margin:10px;
+
 
 background:#111;
 
 color:#00ff88;
 
-border:1px solid #00ff88;
+border:
 
-padding:10px;
+1px solid #00ff88;
+
 
 border-radius:8px;
 
+font-size:16px;
+
+
 }
 
+
+
+button:hover{
+
+background:#003322;
+
+}
+
+
+
+#panel{
+
+
+display:none;
+
+}
+
+
+
+.status{
+
+
+border:
+
+1px solid #00ff88;
+
+padding:15px;
+
+border-radius:10px;
+
+margin-top:15px;
+
+}
+
+
+
+@media(max-width:500px){
+
+
+h1{
+
+font-size:20px;
+
+}
+
+
+
+.box{
+
+padding:15px;
+
+}
+
+
+
+input{
+
+width:100%;
+
+margin:8px 0;
+
+}
+
+
+
+button{
+
+width:100%;
+
+margin:8px 0;
+
+}
+
+
+}
+
+
+
 </style>
+
 
 </head>
 
@@ -58,9 +218,11 @@ border-radius:8px;
 <body>
 
 
+
 <h1>
 🛡 ISECR ADMIN CENTER
 </h1>
+
 
 
 <div class="box">
@@ -71,19 +233,35 @@ border-radius:8px;
 </h2>
 
 
-<input id="name"
-placeholder="帳號">
+
+<input
+
+id="name"
+
+placeholder="管理員帳號"
+
+>
+
 
 
 <br>
 
 
-<input id="pass"
+
+<input
+
+id="pass"
+
 type="password"
-placeholder="密碼">
+
+placeholder="管理員密碼"
+
+>
+
 
 
 <br>
+
 
 
 <button onclick="loginAdmin()">
@@ -93,25 +271,37 @@ placeholder="密碼">
 </button>
 
 
+
 </div>
 
 
 
-<div class="box" id="panel"
-style="display:none">
+
+
+<div class="box" id="panel">
 
 
 <h2>
+
 控制台
+
 </h2>
 
 
-<p>
+<div class="status">
+
 管理員已登入
-</p>
+
+<br><br>
+
+ISECR SYSTEM ONLINE
+
+</div>
 
 
 </div>
+
+
 
 
 
@@ -120,7 +310,10 @@ style="display:none">
 
 
 const API =
+
 "https://isecr-network.onrender.com/api";
+
+
 
 
 
@@ -128,27 +321,60 @@ async function loginAdmin(){
 
 
 let username =
-document.getElementById("name").value;
+
+document
+
+.getElementById("name")
+
+.value
+
+.trim();
+
 
 
 let password =
-document.getElementById("pass").value;
+
+document
+
+.getElementById("pass")
+
+.value;
+
+
+
+
+if(!username || !password){
+
+alert("請輸入完整資料");
+
+return;
+
+}
+
+
 
 
 
 let res =
+
 await fetch(
+
 API+"/login",
+
 {
 
+
 method:"POST",
+
 
 headers:{
 
 "Content-Type":
+
 "application/json"
 
 },
+
 
 body:JSON.stringify({
 
@@ -158,29 +384,43 @@ password
 
 })
 
+
 }
 
 );
 
 
 
+
+
 let data =
+
 await res.json();
 
 
 
+
+
 if(
+
 data.success &&
+
 data.user.level==="ADMIN"
+
 ){
 
 
+
 document
+
 .getElementById("panel")
+
 .style.display="block";
 
 
+
 alert("管理員登入成功");
+
 
 
 }
@@ -198,7 +438,9 @@ alert("權限不足");
 }
 
 
+
 </script>
+
 
 
 </body>
