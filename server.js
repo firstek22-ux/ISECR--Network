@@ -396,9 +396,29 @@ VALUES($1,$2,$3,$4)
 
 app.get("/api/members",(req,res)=>{
 
+    db.query(
+    `
+    SELECT username,level,bio
+    FROM users
+    `,
+    [],
+    (err,result)=>{
 
-    SELECT username,level,bio FROM users
+        if(err){
 
+            console.log(err);
+
+            return res.json([]);
+
+        }
+
+
+        res.json(
+            result.rows
+        );
+
+
+    });
 
 });
 
