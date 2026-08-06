@@ -130,6 +130,38 @@ used BOOLEAN DEFAULT false
     console.log(err);
 
 });
+
+
+
+
+db.query(`
+INSERT INTO invites(code)
+VALUES
+
+('ISECR-7fK9@Qm2#Lx84'),
+
+('ISECR-Xp47!vN9$Ra62'),
+
+('ISECR-M3z8^Hd51&Yu90'),
+
+('ISECR-Pq26*Ws73!Bn45'),
+
+('ISECR-Kv91#Jd48@Tx63'),
+
+('ISECR-Ra57$Lm84^Qc29')
+
+ON CONFLICT DO NOTHING
+`)
+.then(()=>{
+
+    console.log("Default invites added");
+
+})
+.catch(err=>{
+
+    console.log(err);
+
+});
     
 
 
