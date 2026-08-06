@@ -7,7 +7,44 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// ======================
+// 權限檢查
+// ======================
 
+function checkAdmin(username, callback){
+
+    db.query(
+    `
+    SELECT level
+    FROM users
+    WHERE username=$1
+    `,
+    [
+        username
+    ],
+    (err,result)=>{
+
+
+        if(err || result.rows.length===0){
+
+            return callback(false);
+
+        }
+
+
+        if(result.rows[0].level==="ADMIN"){
+
+            return callback(true);
+
+        }
+
+
+        callback(false);
+
+
+    });
+
+}
 
 
 // ======================
@@ -1089,44 +1126,7 @@ result.rows
 
 
 
-// ======================
-// 權限檢查
-// ======================
 
-function checkAdmin(username, callback){
-
-    db.query(
-    `
-    SELECT level
-    FROM users
-    WHERE username=$1
-    `,
-    [
-        username
-    ],
-    (err,result)=>{
-
-
-        if(err || result.rows.length===0){
-
-            return callback(false);
-
-        }
-
-
-        if(result.rows[0].level==="ADMIN"){
-
-            return callback(true);
-
-        }
-
-
-        callback(false);
-
-
-    });
-
-}
 
 
 
