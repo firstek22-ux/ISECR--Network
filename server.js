@@ -31,6 +31,18 @@ likedby TEXT
 )
 
 `)
+.then(()=>{
+
+    console.log("Posts table ready");
+
+})
+.catch(err=>{
+
+    console.log(err);
+
+});
+
+
 
 db.query(`
 
