@@ -10,6 +10,38 @@ app.use(express.json());
 
 
 
+
+
+app.delete("/api/delete-user/:username",(req,res)=>{
+
+    db.query(
+        `
+        DELETE FROM users
+        WHERE username=$1
+        `,
+        [
+            req.params.username
+        ],
+        (err)=>{
+
+            if(err){
+                return res.json({
+                    success:false
+                });
+            }
+
+            res.json({
+                success:true
+            });
+
+        }
+    );
+
+});
+
+
+
+
 // ======================
 // 建立資料表
 // ======================
