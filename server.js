@@ -737,6 +737,178 @@ likedBy
 
 
 
+// ======================
+// 發布評論
+// ======================
+
+app.post("/api/posts/:id/comments",(req,res)=>{
+
+
+const {
+
+author,
+
+content
+
+}=req.body;
+
+
+
+if(!author || !content){
+
+return res.json({
+
+success:false,
+
+message:"資料不完整"
+
+});
+
+}
+
+
+
+const comment={
+
+id:Date.now(),
+
+postid:req.params.id,
+
+author,
+
+content,
+
+time:new Date().toLocaleString()
+
+};
+
+
+
+db.query(
+
+`
+INSERT INTO comments
+
+(id,postid,author,content,time)
+
+VALUES($1,$2,$3,$4,$5)
+
+`,
+
+[
+
+comment.id,
+
+comment.postid,
+
+comment.author,
+
+comment.content,
+
+comment.time
+
+],
+
+
+(err)=>{
+
+
+if(err){
+
+console.log(err);
+
+return res.json({
+
+success:false
+
+});
+
+}
+
+
+
+res.json({
+
+success:true,
+
+comment
+
+});
+
+
+}
+
+
+);
+
+
+});
+
+
+
+
+
+// ======================
+// 取得評論
+// ======================
+
+
+app.get("/api/posts/:id/comments",(req,res)=>{
+
+
+db.query(
+
+`
+SELECT *
+
+FROM comments
+
+WHERE postid=$1
+
+ORDER BY id ASC
+
+`
+
+,
+
+[
+
+req.params.id
+
+],
+
+
+(err,result)=>{
+
+
+if(err){
+
+console.log(err);
+
+return res.json([]);
+
+}
+
+
+
+res.json(
+
+result.rows
+
+);
+
+
+}
+
+
+);
+
+
+});
+
+
+
+
 
 // ======================
 // 刪除文章
