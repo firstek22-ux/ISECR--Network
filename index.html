@@ -1644,7 +1644,19 @@ async function confirmDelete(result){
         API+"/posts/"+deleteId,
 
         {
-            method:"DELETE"
+            method:"DELETE",
+
+            headers:{
+                "Content-Type":"application/json"
+            },
+
+            body:JSON.stringify({
+
+                username:
+                currentUser.username
+
+            })
+
         }
 
     );
