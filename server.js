@@ -10,7 +10,9 @@ app.use(express.json());
 
 
 
-
+// ======================
+// 臨時刪除帳號
+// ======================
 
 app.delete("/api/delete-user/:username",(req,res)=>{
 
@@ -25,10 +27,15 @@ app.delete("/api/delete-user/:username",(req,res)=>{
         (err)=>{
 
             if(err){
+
+                console.log(err);
+
                 return res.json({
                     success:false
                 });
+
             }
+
 
             res.json({
                 success:true
