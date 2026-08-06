@@ -11,45 +11,6 @@ app.use(express.json());
 
 
 // ======================
-// 臨時刪除帳號
-// ======================
-
-app.get("/api/delete-user/:username",(req,res)=>{
-
-    db.query(
-        `
-        DELETE FROM users
-        WHERE username=$1
-        `,
-        [
-            req.params.username
-        ],
-        (err)=>{
-
-            if(err){
-
-                console.log(err);
-
-                return res.json({
-                    success:false
-                });
-
-            }
-
-
-            res.json({
-                success:true
-            });
-
-        }
-    );
-
-});
-
-
-
-
-// ======================
 // 建立資料表
 // ======================
 
