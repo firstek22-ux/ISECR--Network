@@ -31,6 +31,35 @@ likedby TEXT
 )
 
 `)
+
+db.query(`
+
+CREATE TABLE IF NOT EXISTS comments(
+
+id BIGINT PRIMARY KEY,
+
+postId BIGINT,
+
+author TEXT,
+
+content TEXT,
+
+time TEXT
+
+)
+
+`)
+.then(()=>{
+
+    console.log("Comments table ready");
+
+})
+.catch(err=>{
+
+    console.log(err);
+
+});
+    
 .then(()=>{
 
     console.log("Posts table ready");
