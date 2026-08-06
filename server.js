@@ -12,6 +12,8 @@ app.use(express.json());
 // 建立資料表
 // ======================
 
+
+
 db.query(`
 
 CREATE TABLE IF NOT EXISTS posts(
