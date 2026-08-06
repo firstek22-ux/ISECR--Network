@@ -420,6 +420,381 @@ success:true
 
 
 
+    // ======================
+// 文章列表
+// ======================
+
+app.get("/api/posts",(req,res)=>{
+
+
+db.query(
+`
+SELECT *
+
+FROM posts
+
+ORDER BY id DESC
+`
+,
+
+(err,result)=>{
+
+
+if(err){
+
+console.log(err);
+
+return res.json([]);
+
+}
+
+
+
+const posts=result.rows;
+
+
+posts.forEach(post=>{
+
+post.likedBy =
+JSON.parse(
+post.likedby || "[]"
+);
+
+});
+
+
+
+res.json(posts);
+
+
+});
+
+
+});
+
+
+
+
+// ======================
+// 發布文章
+// ======================
+
+
+app.post("/api/posts",(req,res)=>{
+
+
+const {
+
+author,
+
+content
+
+}=req.body;
+
+
+
+if(!author || !content){
+
+return res.json({
+
+success:false,
+
+message:"資料不完整"
+
+});
+
+}
+
+
+
+const post={
+
+
+id:Date.now(),
+
+
+author,
+
+
+content,
+
+
+time:new Date().toLocaleString(),
+
+
+likes:0,
+
+
+likedBy:[]
+
+
+};
+
+
+
+db.query(
+
+`
+INSERT INTO posts
+
+(id,author,content,time,likes,likedby)
+
+VALUES($1,$2,$3,$4,$5,$6)
+
+`
+,
+
+[
+
+post.id,
+
+post.author,
+
+post.content,
+
+post.time,
+
+post.likes,
+
+JSON.stringify(post.likedBy)
+
+],
+
+
+(err)=>{
+
+
+if(err){
+
+console.log(err);
+
+
+return res.json({
+
+success:false
+
+});
+
+}
+
+
+
+res.json({
+
+success:true,
+
+post
+
+});
+
+
+}
+
+);
+
+
+});
+
+
+
+
+
+// ======================
+// 點讚
+// ======================
+
+
+app.post("/api/posts/:id/like",(req,res)=>{
+
+
+const id=req.params.id;
+
+const user=req.body.user;
+
+
+
+db.query(
+
+`
+SELECT *
+
+FROM posts
+
+WHERE id=$1
+
+`
+
+,
+
+[id],
+
+(err,result)=>{
+
+
+if(err || result.rows.length===0){
+
+return res.json({
+
+success:false
+
+});
+
+}
+
+
+
+const post=result.rows[0];
+
+
+
+let likedBy =
+JSON.parse(post.likedby || "[]");
+
+
+
+let likes =
+post.likes || 0;
+
+
+
+if(likedBy.includes(user)){
+
+
+likedBy =
+likedBy.filter(
+u=>u!==user
+);
+
+
+likes--;
+
+
+}
+
+else{
+
+
+likedBy.push(user);
+
+likes++;
+
+
+}
+
+
+
+
+db.query(
+
+`
+UPDATE posts
+
+SET likes=$1,
+
+likedby=$2
+
+WHERE id=$3
+
+`
+
+,
+
+[
+
+likes,
+
+JSON.stringify(likedBy),
+
+id
+
+],
+
+()=>{
+
+
+res.json({
+
+success:true,
+
+likes,
+
+likedBy
+
+});
+
+
+}
+
+);
+
+
+
+});
+
+
+});
+
+
+
+
+
+// ======================
+// 刪除文章
+// ======================
+
+
+app.delete("/api/posts/:id",(req,res)=>{
+
+
+const id=req.params.id;
+
+
+
+db.query(
+
+`
+DELETE FROM posts
+
+WHERE id=$1
+
+`
+
+,
+
+[id],
+
+(err)=>{
+
+
+if(err){
+
+return res.json({
+
+success:false
+
+});
+
+}
+
+
+
+res.json({
+
+success:true
+
+});
+
+
+}
+
+
+);
+
+
+});
+
+
+
 // ======================
 // 啟動伺服器
 // ======================
