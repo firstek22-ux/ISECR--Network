@@ -298,37 +298,51 @@ app.post("/api/register",(req,res)=>{
 
 
 
-    const code =
-    invites.find(
-        i =>
-        i.code === invite
-    );
+db.query(
+`
+SELECT *
+FROM invites
+WHERE code=$1
+`,
+[
+    invite
+],
+(err,result)=>{
 
+    if(err){
 
-    if(!code){
+        console.log(err);
 
         return res.json({
-
-            success:false,
-
-            message:"邀請碼錯誤"
-
+            success:false
         });
 
     }
+
+
+    if(result.rows.length===0){
+
+        return res.json({
+            success:false,
+            message:"邀請碼錯誤"
+        });
+
+    }
+
+
+    const code = result.rows[0];
 
 
     if(code.used){
 
         return res.json({
-
             success:false,
-
             message:"邀請碼已使用"
-
         });
 
     }
+
+});
 
 
 
