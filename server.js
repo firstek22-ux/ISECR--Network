@@ -268,15 +268,7 @@ AND password=$2
 // ======================
 
 
-
-const express = require("express");
-const cors = require("cors");
-const db = require("./database");
-
-const app = express();
-
-app.use(cors());
-app.use(express.json());
+//昔人已乘黃鶴去，此地空餘備註欄
 
 
 // ======================
