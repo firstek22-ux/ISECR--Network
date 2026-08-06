@@ -1014,22 +1014,39 @@ result.rows
 // ======================
 
 
+// ======================
+// 刪除文章
+// ======================
+
 app.delete("/api/posts/:id",(req,res)=>{
 
+const id = req.params.id;
 
-const username=req.body.username;
-
-
-checkAdmin(username,(isAdmin)=>{
+const username = req.body.username;
 
 
-if(!isAdmin){
+// 先找文章
+
+db.query(
+`
+SELECT *
+FROM posts
+WHERE id=$1
+`,
+[
+id
+],
+
+(err,result)=>{
+
+
+if(err || result.rows.length===0){
 
 return res.json({
 
 success:false,
 
-message:"權限不足"
+message:"文章不存在"
 
 });
 
@@ -1037,20 +1054,66 @@ message:"權限不足"
 
 
 
-const id=req.params.id;
+const post = result.rows[0];
 
 
+
+// 檢查是不是管理員
+
+checkAdmin(username,(isAdmin)=>{
+
+
+// 管理員直接通過
+
+if(isAdmin){
+
+deletePost();
+
+return;
+
+}
+
+
+
+// 不是管理員，檢查是不是作者
+
+if(post.author !== username){
+
+return res.json({
+
+success:false,
+
+message:"不能刪除他人的文章"
+
+});
+
+}
+
+
+
+// 作者本人
+
+deletePost();
+
+
+
+});
+
+
+
+
+// 真正刪除函式
+
+function deletePost(){
 
 db.query(
-
 `
 DELETE FROM posts
 WHERE id=$1
-`
-
-,
-
-[id],
+`,
+[
+id
+],
 
 (err)=>{
 
@@ -1066,7 +1129,6 @@ success:false
 }
 
 
-
 res.json({
 
 success:true
@@ -1076,11 +1138,16 @@ success:true
 
 }
 
-
 );
 
 
-});
+}
+
+
+}
+
+
+);
 
 
 });
