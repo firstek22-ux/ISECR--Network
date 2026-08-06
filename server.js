@@ -170,39 +170,7 @@ ON CONFLICT DO NOTHING
 // 臨時資料
 // ======================
 
-let invites = [
-
-    {
-        code:"*^↓§∆¥¢¢€™✓ππ÷×••",
-        used:false
-    },
-    
-    {
-        code:"*pihHgGvGgtR$56tYyyh",
-        used:false
-    },
-
-    {
-        code:"fjeg!$+$&:;kvkudh",
-        used:false
-    },
-
-    {
-        code:"cjifhs7266458JFJEHD",
-        used:false
-    },
-
-    {
-        code:"0286868eufjxyvJDJRUWW",
-        used:false
-    },
-
-    {
-        code:"kcjegwy62yr685h48w8",
-        used:false
-    }
-
-];
+       
 
 
 
