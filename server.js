@@ -48,6 +48,36 @@ likedby TEXT
 
 db.query(`
 
+CREATE TABLE IF NOT EXISTS users(
+
+id BIGSERIAL PRIMARY KEY,
+
+username TEXT UNIQUE,
+
+password TEXT,
+
+level TEXT,
+
+bio TEXT
+
+)
+
+`)
+.then(()=>{
+
+    console.log("Users table ready");
+
+})
+.catch(err=>{
+
+    console.log(err);
+
+});
+
+
+
+db.query(`
+
 CREATE TABLE IF NOT EXISTS comments(
 
 id BIGINT PRIMARY KEY,
@@ -84,40 +114,38 @@ time TEXT
 let invites = [
 
     {
-        code:"ISECR001",
+        code:"*^↓§∆¥¢¢€™✓ππ÷×••",
+        used:false
+    },
+    
+    {
+        code:"*pihHgGvGgtR$56tYyyh",
         used:false
     },
 
     {
-        code:"ISECR002",
+        code:"fjeg!$+$&:;kvkudh",
         used:false
     },
 
     {
-        code:"ISECR003",
+        code:"cjifhs7266458JFJEHD",
+        used:false
+    },
+
+    {
+        code:"0286868eufjxyvJDJRUWW",
+        used:false
+    },
+
+    {
+        code:"kcjegwy62yr685h48w8",
         used:false
     }
 
 ];
 
 
-let members = [
-
-    {
-        username:"LKSK",
-        password:"ARLY",
-        level:"A6",
-        bio:"ISECR 核心成員"
-    },
-
-    {
-        username:"R.exe",
-        password:"RWW",
-        level:"B2",
-        bio:"ISECR 技術部"
-    }
-
-];
 
 
 // ======================
@@ -147,12 +175,8 @@ app.post("/api/login",(req,res)=>{
     } = req.body;
 
 
-    const user =
-    members.find(
-        m =>
-        m.username === username &&
-        m.password === password
-    );
+    SELECT * FROM users
+WHERE username=$1 AND password=$2
 
 
     if(user){
@@ -285,7 +309,9 @@ app.post("/api/register",(req,res)=>{
     };
 
 
-    members.push(newUser);
+    INSERT INTO users
+(username,password,level,bio)
+VALUES(...)
 
     code.used=true;
 
@@ -312,11 +338,7 @@ app.post("/api/register",(req,res)=>{
 app.get("/api/members",(req,res)=>{
 
 
-    res.json(
-
-        members
-
-    );
+    SELECT username,level,bio FROM users
 
 
 });
