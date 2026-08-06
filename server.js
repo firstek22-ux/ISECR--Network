@@ -103,6 +103,33 @@ time TEXT
     console.log(err);
 
 });
+
+
+
+
+db.query(`
+
+CREATE TABLE IF NOT EXISTS invites(
+
+id BIGSERIAL PRIMARY KEY,
+
+code TEXT UNIQUE,
+
+used BOOLEAN DEFAULT false
+
+)
+
+`)
+.then(()=>{
+
+    console.log("Invites table ready");
+
+})
+.catch(err=>{
+
+    console.log(err);
+
+});
     
 
 
